@@ -12,8 +12,16 @@ import viteIcon from "./assets/vite.svg";
       <RouterLink to="/workspace">Workspace</RouterLink>
     </nav>
   </header>
-  <RouterView />
+  <div id="content">
+    <RouterView />
+  </div>
   <footer>
     <img :src="viteIcon" />
   </footer>
 </template>
+
+<style>
+#content {
+  padding: 20px;
+}
+</style>

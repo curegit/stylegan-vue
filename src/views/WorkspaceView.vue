@@ -20,12 +20,20 @@ const gen = async () => {
 };
 
 const dataurl = (base64: string) => "data:image/png;base64," + base64;
+
+function download(event: MouseEvent): void {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(state.value, null, 2)], { type: "application/json" }));
+  a.download = `${state.value.model_id}.json`;
+  a.dispatchEvent(new MouseEvent("click"));
+}
 </script>
 
 <template>
   <main>
     <h2>Workspace</h2>
     <button @click="gen">GEN</button>
+    <button @click="download">DOWNLOAD</button>
     <div id="output">
       <img v-for="(i, key) in state.items" :key="key" :src="dataurl(i.data)" :width="i.width" :height="i.height" />
     </div>

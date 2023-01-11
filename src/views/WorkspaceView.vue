@@ -27,6 +27,22 @@ function download(event: MouseEvent): void {
   a.download = `${state.value.model_id}.json`;
   a.dispatchEvent(new MouseEvent("click"));
 }
+
+function upload(event: Event): void {
+  const fileInput = event.currentTarget;
+  if (fileInput instanceof HTMLInputElement && fileInput.files !== null) {
+    const [file] = fileInput.files;
+    if (file) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        const str = reader.result as string;
+        const obj = JSON.parse(str);
+        state.value = obj;
+      });
+      reader.readAsText(file);
+    }
+  }
+}
 </script>
 
 <template>
@@ -34,6 +50,7 @@ function download(event: MouseEvent): void {
     <h2>Workspace</h2>
     <button @click="gen">GEN</button>
     <button @click="download">DOWNLOAD</button>
+    <input type="file" @change="upload" />
     <div id="output">
       <img v-for="(i, key) in state.items" :key="key" :src="dataurl(i.data)" :width="i.width" :height="i.height" />
     </div>

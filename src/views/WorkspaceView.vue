@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const ini: { model_id: string; items: Res[] } = {
-  model_id: "afhq",
-  items: [],
-};
+type State = {};
 
-const state = ref(ini);
+const props = defineProps<{
+  state: State;
+}>();
 
 interface Res {
   data: string;
@@ -15,11 +14,13 @@ interface Res {
 }
 
 const gen = async () => {
-  const res: Res = await fetch(`http://localhost:8000/${state.value.model_id}/generate`).then((res) => res.json());
+  const res: Res = await fetch(`http://localhost:8000/${state.value.model_id}/generate`, { method: "POST" }).then(
+    (res) => res.json()
+  );
   state.value.items.push(res);
 };
 
-const dataurl = (base64: string) => "data:image/png;base64," + base64;
+const dataurl = (base64: string, mime_type: string = "image/png") => `data:${mime_type};base64,${base64}`;
 
 function download(event: MouseEvent): void {
   const a = document.createElement("a");
@@ -52,7 +53,13 @@ function upload(event: Event): void {
     <button @click="download">DOWNLOAD</button>
     <input type="file" @change="upload" />
     <div id="output">
-      <img v-for="(i, key) in state.items" :key="key" :src="dataurl(i.data)" :width="i.width" :height="i.height" />
+      <img
+        v-for="(i, key) in state.items"
+        :key="key"
+        :src="dataurl(i.data, i.mime_type)"
+        :width="i.width"
+        :height="i.height"
+      />
     </div>
   </main>
 </template>

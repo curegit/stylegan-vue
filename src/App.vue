@@ -1,33 +1,27 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import viteIcon from "./assets/vite.svg";
+import HeaderPart from "./parts/HeaderPart.vue";
 import HomeView from "./views/HomeView.vue";
 import WorkspaceView from "./views/WorkspaceView.vue";
+import FooterPart from "./parts/FooterPart.vue";
 
-const models = ref([] as string[]);
+interface State {}
 
-setTimeout(() => {
-  models.value.push("afhq");
-}, 5000);
+const state = ref<State | null>(null);
 </script>
 
 <template>
-  <header v-if="models.length > 0">
-    <h1>Vue SPA</h1>
-    <nav></nav>
-  </header>
-  <div id="content">
-    <HomeView> </HomeView>
-    <WorkspaceView />
+  <HeaderPart />
+  <div id="view">
+    <HomeView v-if="state === null" />
+    <WorkspaceView v-else :state="state" />
   </div>
-  <footer>
-    <img :src="viteIcon" />
-  </footer>
+  <FooterPart />
 </template>
 
 <style>
-#content {
+#view {
   padding: 20px;
 }
 </style>

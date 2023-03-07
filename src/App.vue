@@ -1,19 +1,25 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { ref } from "vue";
 
 import viteIcon from "./assets/vite.svg";
+import HomeView from "./views/HomeView.vue";
+import WorkspaceView from "./views/WorkspaceView.vue";
+
+const models = ref([] as string[]);
+
+setTimeout(() => {
+  models.value.push("afhq");
+}, 5000);
 </script>
 
 <template>
-  <header>
+  <header v-if="models.length > 0">
     <h1>Vue SPA</h1>
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/workspace">Workspace</RouterLink>
-    </nav>
+    <nav></nav>
   </header>
   <div id="content">
-    <RouterView />
+    <HomeView> </HomeView>
+    <WorkspaceView />
   </div>
   <footer>
     <img :src="viteIcon" />

@@ -9,9 +9,21 @@
     "esModuleInterop": true,
     "strict": true,
     "jsx": "preserve",
+    "types": [
+      "vite/client"
+    ],
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
-  "references": [{ "path": "tsconfig.node.json" }]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue"
+  ],
+  "references": [
+    {
+      "path": "tsconfig.node.json"
+    }
+  ]
 }

@@ -8,8 +8,8 @@ import FooterPart from "./parts/FooterPart.vue";
 
 const state = ref<WorkspaceState | null>(null);
 
-function update(f: (a: WorkspaceState) => WorkspaceState) {
-  if (state.value !== null) state.value = f(state.value);
+function update(s: WorkspaceState) {
+  state.value = s;
 }
 
 function select(name: string) {
@@ -23,7 +23,7 @@ function select(name: string) {
 <template>
   <HeaderPart />
   <div id="view">
-    <HomeView v-if="state === null" :selector="select" />
+    <HomeView v-if="state === null" :selector="select" :updater="update" />
     <WorkspaceView v-else :state="state" :updater="update" />
   </div>
   <FooterPart />

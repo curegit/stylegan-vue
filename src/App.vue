@@ -6,16 +6,25 @@ import HomeView from "./views/HomeView.vue";
 import WorkspaceView from "./views/WorkspaceView.vue";
 import FooterPart from "./parts/FooterPart.vue";
 
-interface State {}
+const state = ref<WorkspaceState | null>(null);
 
-const state = ref<State | null>(null);
+function update(f: (a: WorkspaceState) => WorkspaceState) {
+  if (state.value !== null) state.value = f(state.value);
+}
+
+function select(name: string) {
+  state.value = {
+    model_id: name,
+    data: [],
+  };
+}
 </script>
 
 <template>
   <HeaderPart />
   <div id="view">
-    <HomeView v-if="state === null" />
-    <WorkspaceView v-else :state="state" />
+    <HomeView v-if="state === null" :selector="select" />
+    <WorkspaceView v-else :state="state" :updater="update" />
   </div>
   <FooterPart />
 </template>

@@ -18,13 +18,20 @@ function select(name: string) {
     data: [],
   };
 }
+
+function reset() {
+  state.value = null;
+}
 </script>
 
 <template>
   <HeaderPart />
+  <button @click="reset">Reset</button>
   <div id="view">
     <HomeView v-if="state === null" :selector="select" :updater="update" />
-    <WorkspaceView v-else :state="state" :updater="update" />
+    <Transition :name="'bounce'">
+      <WorkspaceView v-if="state !== null" :state="state" :updater="update" />
+    </Transition>
   </div>
   <FooterPart />
 </template>
@@ -32,5 +39,23 @@ function select(name: string) {
 <style>
 #view {
   padding: 20px;
+}
+
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 const props = defineProps<{
   state: WorkspaceState;
-  updater: (s: WorkspaceState) => void;
+  update: (s: WorkspaceState) => void;
 }>();
 
 interface Res {
@@ -22,7 +22,7 @@ const gen = async () => {
 
   const data = [...props.state.data, { data: res.data, width: res.width, height: res.height, mime: res.mime_type }];
   const s = { ...props.state, data };
-  props.updater(s);
+  props.update(s);
 };
 
 const dataurl = (base64: string, mime_type: string = "image/png") => `data:${mime_type};base64,${base64}`;

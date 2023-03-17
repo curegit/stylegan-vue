@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 import HeaderPart from "./parts/HeaderPart.vue";
 import HomeView from "./views/HomeView.vue";
@@ -7,6 +7,35 @@ import WorkspaceView from "./views/WorkspaceView.vue";
 import FooterPart from "./parts/FooterPart.vue";
 
 const state = ref<WorkspaceState | null>(null);
+
+const dirty = ref<boolean>(false);
+
+watch(state, (newValue) => {
+  if (newValue === null) {
+    dirty.value = false;
+  } else if (newValue.data.length === 0) {
+    dirty.value = false;
+  } else {
+    dirty.value = true;
+  }
+});
+
+watch(dirty, (newValue, oldValue) => {
+  if (newValue !== oldValue) {
+    if (newValue) {
+      document.title = "*" + document.title;
+    } else {
+      document.title = document.title.substring(1);
+    }
+  }
+});
+
+window.addEventListener("beforeunload", (event) => {
+  if (dirty.value) {
+    event.preventDefault();
+    event.returnValue = "";
+  }
+});
 
 function update(s: WorkspaceState) {
   state.value = s;
@@ -29,8 +58,8 @@ function reset() {
   <button @click="reset">Reset</button>
   <div id="view">
     <HomeView v-if="state === null" :selector="select" :updater="update" />
-    <Transition :name="'bounce'">
-      <WorkspaceView v-if="state !== null" :state="state" :updater="update" />
+    <Transition name="bounce">
+      <WorkspaceView v-if="state !== null" :state="state" :update="update" />
     </Transition>
   </div>
   <FooterPart />
@@ -39,23 +68,5 @@ function reset() {
 <style>
 #view {
   padding: 20px;
-}
-
-.bounce-enter-active {
-  animation: bounce-in 0.5s;
-}
-.bounce-leave-active {
-  animation: bounce-in 0.5s reverse;
-}
-@keyframes bounce-in {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.25);
-  }
-  100% {
-    transform: scale(1);
-  }
 }
 </style>

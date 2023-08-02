@@ -18,12 +18,13 @@
     "url": "git+https://github.com/curegit/stylegan-vue.git"
   },
   "author": "curegit (https://github.com/curegit)",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/curegit/stylegan-vue/issues"
   },
   "homepage": "https://github.com/curegit/stylegan-vue",
   "dependencies": {
-    "vue": "^3.2.0"
+    "vue": "^3.2.47"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",

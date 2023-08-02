@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 
+import ImageGrid from "../components/ImageGrid.vue";
+
+import SelectionItem from "../components/SelectionItem.vue";
+
+import ComputingIndicator from "../components/ComputingIndicator.vue";
+
 const props = defineProps<{
   state: WorkspaceState;
   update: (s: WorkspaceState) => void;
@@ -16,9 +22,9 @@ interface Res {
 const filename = ref<string | undefined>(undefined);
 
 const gen = async () => {
-  const res: Res = await fetch(`http://localhost:8000/${props.state.model_id}/generate`, { method: "POST" }).then(
-    (res) => res.json()
-  );
+  const res: Res = await fetch(`https://stylegan.mermaid.blue/${props.state.model_id}/generate`, {
+    method: "POST",
+  }).then((res) => res.json());
 
   const data = [...props.state.data, { data: res.data, width: res.width, height: res.height, mime: res.mime_type }];
   const s = { ...props.state, data };
@@ -26,6 +32,8 @@ const gen = async () => {
 };
 
 const dataurl = (base64: string, mime_type: string = "image/png") => `data:${mime_type};base64,${base64}`;
+
+async function name() {}
 
 function download(event: MouseEvent): void {
   const a = document.createElement("a");
@@ -38,6 +46,10 @@ const setname = (event: Event) => {
   const t = event.currentTarget as HTMLInputElement;
   filename.value = t.value;
 };
+
+SelectionItem.checked;
+
+const l = ref<Array<HTMLElement>>([]);
 </script>
 
 <template>
@@ -47,13 +59,12 @@ const setname = (event: Event) => {
     <button @click="download">DOWNLOAD</button>
     <input type="text" @change="setname" />
     <div id="output">
-      <img
-        v-for="(i, key) in state.data"
-        :key="key"
-        :src="dataurl(i.data, i.mime)"
-        :width="i.width"
-        :height="i.height"
-      />
+      <div>
+        <SelectionItem v-for="(i, key) in state.data" :key="key" :ref="l" :initial="true" :updater="(v) => {}">
+          <img :src="dataurl(i.data, i.mime)" :width="i.width" :height="i.height"
+        /></SelectionItem>
+        <ComputingIndicator></ComputingIndicator>
+      </div>
     </div>
   </main>
 </template>

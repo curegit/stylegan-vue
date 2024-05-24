@@ -5,7 +5,7 @@ import SelectionItem from "../components/SelectionItem.vue";
 
 defineProps<{
   key: string;
-  check:
+  check: boolean
 }>();
 </script>
 

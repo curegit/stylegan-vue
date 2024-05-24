@@ -19,10 +19,12 @@ interface Res {
   mime_type: string;
 }
 
+const a = "https://stylegan.mermaid.blue";
+
 const filename = ref<string | undefined>(undefined);
 
 const gen = async () => {
-  const res: Res = await fetch(`https://stylegan.mermaid.blue/${props.state.model_id}/generate`, {
+  const res: Res = await fetch(`${a}/${props.state.model_id}/generate`, {
     method: "POST",
   }).then((res) => res.json());
 

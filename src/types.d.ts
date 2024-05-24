@@ -11,7 +11,7 @@ export declare global {
 
   type ImageData = {
     data: string;
-    mime: string;
+    mime_type: string;
     width: number;
     height: number;
   };

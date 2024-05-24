@@ -18,7 +18,9 @@ const props = defineProps<{
   updater: (state: WorkspaceState) => void;
 }>();
 
-const models = ref<Model[] | undefined>(undefined);
+type Error = null;
+
+const models = ref<Model[] | Error | undefined>(undefined);
 
 function upload(event: Event): void {
   const fileInput = event.currentTarget;
@@ -36,9 +38,20 @@ function upload(event: Event): void {
   }
 }
 
+const a = "http://127.0.0.1:8000";
+
 (async () => {
-  await new Promise((s) => setTimeout(s, 100000));
-  models.value = await fetch(`https://stylegan.mermaid.blue/models/`, {}).then((res) => res.json());
+  await new Promise((s) => setTimeout(s, 1000));
+  const fetchPromise = fetch(`${a}/models/`, {}).then((res) => res.json());
+  const timeoutPromise = new Promise((_, reject) => setTimeout(reject, 1000));
+  const modelsPromise = await Promise.race([fetchPromise, timeoutPromise]).then(
+    (result) => result,
+    (error) => {
+      console.error(error);
+      return null;
+    },
+  );
+  models.value = modelsPromise;
 })();
 </script>
 
@@ -46,18 +59,21 @@ function upload(event: Event): void {
   <main>
     <h2>Model Select</h2>
     <LoadingIndicator v-if="models === undefined"></LoadingIndicator>
-    <ul v-else>
-      <li v-for="val in models" :key="val.id">
-        <ModelCard
-          :name="val.name"
-          :description="val.description"
-          :width="val.width"
-          :height="val.height"
-          @click="() => props.selector(val.id)"
-        ></ModelCard>
-      </li>
-    </ul>
-    <h2>Load Workspace</h2>
-    <input type="file" @change="upload" />
+    <div v-else-if="models === null">Error!!!</div>
+    <div v-else>
+      <ul>
+        <li v-for="val in models" :key="val.id">
+          <ModelCard
+            :name="val.name"
+            :description="val.description"
+            :width="val.width"
+            :height="val.height"
+            @click="() => props.selector(val.id)"
+          ></ModelCard>
+        </li>
+      </ul>
+      <h2>Load Workspace</h2>
+      <input type="file" @change="upload" />
+    </div>
   </main>
 </template>

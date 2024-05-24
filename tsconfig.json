@@ -10,8 +10,13 @@
     "strict": true,
     "jsx": "preserve",
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
-  "references": [{ "path": "tsconfig.node.json" }]
+  "references": [
+    {
+      "path": "tsconfig.node.json"
+    }
+  ]
 }

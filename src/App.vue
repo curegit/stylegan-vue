@@ -1,27 +1,72 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { ref, watch } from "vue";
 
-import viteIcon from "./assets/vite.svg";
+import HeaderPart from "./parts/HeaderPart.vue";
+import HomeView from "./views/HomeView.vue";
+import WorkspaceView from "./views/WorkspaceView.vue";
+import FooterPart from "./parts/FooterPart.vue";
+
+const state = ref<WorkspaceState | null>(null);
+
+const dirty = ref<boolean>(false);
+
+watch(state, (newValue) => {
+  if (newValue === null) {
+    dirty.value = false;
+  } else if (newValue.data.length === 0) {
+    dirty.value = false;
+  } else {
+    dirty.value = true;
+  }
+});
+
+watch(dirty, (newValue, oldValue) => {
+  if (newValue !== oldValue) {
+    if (newValue) {
+      document.title = "*" + document.title;
+    } else {
+      document.title = document.title.substring(1);
+    }
+  }
+});
+
+window.addEventListener("beforeunload", (event) => {
+  if (dirty.value) {
+    event.preventDefault();
+    event.returnValue = "";
+  }
+});
+
+function update(s: WorkspaceState) {
+  state.value = s;
+}
+
+function select(name: string) {
+  state.value = {
+    model_id: name,
+    data: [],
+  };
+}
+
+function reset() {
+  state.value = null;
+}
 </script>
 
 <template>
-  <header>
-    <h1>Vue SPA</h1>
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/workspace">Workspace</RouterLink>
-    </nav>
-  </header>
-  <div id="content">
-    <RouterView />
+  <HeaderPart />
+  <button @click="reset">Reset</button>
+  <div id="view">
+    <HomeView v-if="state === null" :selector="select" :updater="update" />
+    <Transition name="bounce">
+      <WorkspaceView v-if="state !== null" :state="state" :update="update" />
+    </Transition>
   </div>
-  <footer>
-    <img :src="viteIcon" />
-  </footer>
+  <FooterPart />
 </template>
 
 <style>
-#content {
+#view {
   padding: 20px;
 }
 </style>

@@ -5,6 +5,9 @@ import LoadingIndicator from "../components/LoadingIndicator.vue";
 
 import ModelCard from "../components/ModelCard.vue";
 
+import createClient from "openapi-fetch";
+import type { paths } from "../schemas";
+
 interface Model {
   id: string;
   name: string;
@@ -38,7 +41,14 @@ function upload(event: Event): void {
   }
 }
 
-const a = "http://127.0.0.1:8000";
+const a = import.meta.env.VITE_STYLEGAN_API ?? "http://127.0.0.1:8000";
+
+const client = createClient<paths>({ baseUrl: a });
+
+const {
+  data, // only present if 2XX response
+  // only present if 4XX or 5XX response
+} =  client.GET("/models/").then(x => x.data.)
 
 (async () => {
   await new Promise((s) => setTimeout(s, 1000));
@@ -63,13 +73,7 @@ const a = "http://127.0.0.1:8000";
     <div v-else>
       <ul>
         <li v-for="val in models" :key="val.id">
-          <ModelCard
-            :name="val.name"
-            :description="val.description"
-            :width="val.width"
-            :height="val.height"
-            @click="() => props.selector(val.id)"
-          ></ModelCard>
+          <ModelCard :name="val.name" :description="val.description" :width="val.width" :height="val.height" @click="() => props.selector(val.id)"></ModelCard>
         </li>
       </ul>
       <h2>Load Workspace</h2>

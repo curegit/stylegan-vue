@@ -19,7 +19,7 @@ interface Res {
   mime_type: string;
 }
 
-const a = "https://stylegan.mermaid.blue";
+const a = import.meta.env.VITE_STYLEGAN_API;
 
 const filename = ref<string | undefined>(undefined);
 

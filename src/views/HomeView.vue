@@ -1,20 +1,9 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 
+import { getModels } from "../call";
 import LoadingIndicator from "../components/LoadingIndicator.vue";
-
 import ModelCard from "../components/ModelCard.vue";
-
-import createClient from "openapi-fetch";
-import type { paths } from "../schemas";
-
-interface Model {
-  id: string;
-  name: string;
-  description: string;
-  width: number;
-  height: number;
-}
 
 const props = defineProps<{
   selector: (name: string) => void;
@@ -41,25 +30,13 @@ function upload(event: Event): void {
   }
 }
 
-const a = import.meta.env.VITE_STYLEGAN_API ?? "http://127.0.0.1:8000";
-
-const client = createClient<paths>({ baseUrl: a });
-
-const {
-  data, // only present if 2XX response
-  // only present if 4XX or 5XX response
-} =  client.GET("/models/").then(x => x.data.)
-
 (async () => {
-  await new Promise((s) => setTimeout(s, 1000));
-  const fetchPromise = fetch(`${a}/models/`, {}).then((res) => res.json());
-  const timeoutPromise = new Promise((_, reject) => setTimeout(reject, 1000));
-  const modelsPromise = await Promise.race([fetchPromise, timeoutPromise]).then(
-    (result) => result,
-    (error) => {
-      console.error(error);
-      return null;
-    },
+  const loadingMinDelay = new Promise((r) => setTimeout(r, 600));
+  await loadingMinDelay;
+  const timeoutPromise = new Promise<never>((_, reject) => setTimeout(reject, 5000));
+  const modelsPromise = await Promise.race([getModels(), timeoutPromise]).then(
+    (models) => models,
+    (error) => (console.error(error), null),
   );
   models.value = modelsPromise;
 })();
@@ -73,7 +50,7 @@ const {
     <div v-else>
       <ul>
         <li v-for="val in models" :key="val.id">
-          <ModelCard :name="val.name" :description="val.description" :width="val.width" :height="val.height" @click="() => props.selector(val.id)"></ModelCard>
+          <ModelCard :model="val" @click="() => props.selector(val.id)"></ModelCard>
         </li>
       </ul>
       <h2>Load Workspace</h2>

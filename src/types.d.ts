@@ -1,12 +1,7 @@
 export declare global {
-  type WorkSpace = {
-    state: WorkspaceState;
-    update: (state: WorkspaceState) => void;
-  };
-
   type WorkspaceState = {
     model_id: string;
-    data: ImageData[];
+    data: { gen: ImageData[] };
   };
 
   type ImageData = {
@@ -19,4 +14,12 @@ export declare global {
   type SimpleImage = ImageData & {
     latent: string;
   };
+
+  interface Model {
+    id: string;
+    name: string;
+    description: string;
+    width: number;
+    height: number;
+  }
 }

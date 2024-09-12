@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, computed, VNode } from "vue";
 
+import { client, getModelsDict } from "../call";
 import ImageGrid from "../components/ImageGrid.vue";
 
 import SelectionItem from "../components/SelectionItem.vue";
@@ -9,28 +10,21 @@ import ComputingIndicator from "../components/ComputingIndicator.vue";
 
 const props = defineProps<{
   state: WorkspaceState;
-  update: (s: WorkspaceState) => void;
+  updater: (s: WorkspaceState) => void;
 }>();
-
-interface Res {
-  data: string;
-  width: number;
-  height: number;
-  mime_type: string;
-}
-
-const a = import.meta.env.VITE_STYLEGAN_API;
 
 const filename = ref<string | undefined>(undefined);
 
-const gen = async () => {
-  const res: Res = await fetch(`${a}/${props.state.model_id}/generate`, {
-    method: "POST",
-  }).then((res) => res.json());
+async function modelSpec() {
+  return (await getModelsDict())[props.state.model_id];
+}
 
-  const data = [...props.state.data, { data: res.data, width: res.width, height: res.height, mime: res.mime_type }];
-  const s = { ...props.state, data };
-  props.update(s);
+const gen = async () => {
+  const { data } = await client.POST("/{model_id}/generate", { params: { path: { model_id: props.state.model_id } } });
+
+  //const data = [...props.state.data, { data: res.data, width: res.width, height: res.height, mime: res.mime_type }];
+  const s = { ...props.state, ...[...props.state.data.gen, data] };
+  props.updater(s);
 };
 
 const dataurl = (base64: string, mime_type: string = "image/png") => `data:${mime_type};base64,${base64}`;
@@ -51,7 +45,7 @@ const setname = (event: Event) => {
 
 SelectionItem.checked;
 
-const l = ref<Array<HTMLElement>>([]);
+const l = ref<any>(undefined);
 </script>
 
 <template>
@@ -62,8 +56,8 @@ const l = ref<Array<HTMLElement>>([]);
     <input type="text" @change="setname" />
     <div id="output">
       <div>
-        <SelectionItem v-for="(i, key) in state.data" :key="key" :ref="l" :initial="true" :updater="(v) => {}">
-          <img :src="dataurl(i.data, i.mime)" :width="i.width" :height="i.height"
+        <SelectionItem v-for="(i, key) in state.data.gen" :key="key" :ref="l" :initial="true" :updater="(v) => {}">
+          <img :src="dataurl(i.data, i.mime_type)" :width="i.width" :height="i.height"
         /></SelectionItem>
         <ComputingIndicator></ComputingIndicator>
       </div>

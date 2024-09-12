@@ -1,15 +1,12 @@
 <script setup lang="ts">
 defineProps<{
-  name: string;
-  description: string;
-  width: number;
-  height: number;
+  model: Model;
 }>();
 </script>
 
 <template>
   <div class="card">
-    <div class="name">{{ name }}</div>
-    <div class="description">{{ description }} ({{ width }}x{{ height }})</div>
+    <div class="name">{{ model.name }}</div>
+    <div class="description">{{ model.description }} ({{ model.width }}x{{ model.height }})</div>
   </div>
 </template>

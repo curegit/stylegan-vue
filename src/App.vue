@@ -13,7 +13,7 @@ const dirty = ref<boolean>(false);
 watch(state, (newValue) => {
   if (newValue === null) {
     dirty.value = false;
-  } else if (newValue.data.length === 0) {
+  } else if (Object.values(newValue.data).every((x) => !x)) {
     dirty.value = false;
   } else {
     dirty.value = true;
@@ -33,18 +33,17 @@ watch(dirty, (newValue, oldValue) => {
 window.addEventListener("beforeunload", (event) => {
   if (dirty.value) {
     event.preventDefault();
-    event.returnValue = "";
   }
 });
 
-function update(s: WorkspaceState) {
-  state.value = s;
+function update(newState: WorkspaceState) {
+  state.value = newState;
 }
 
-function select(name: string) {
+function selectModel(name: string) {
   state.value = {
     model_id: name,
-    data: [],
+    data: { gen: [] },
   };
 }
 
@@ -57,9 +56,9 @@ function reset() {
   <HeaderPart />
   <button @click="reset">Reset</button>
   <div id="view">
-    <HomeView v-if="state === null" :selector="select" :updater="update" />
+    <HomeView v-if="state === null" :selector="selectModel" :updater="update" />
     <Transition name="bounce">
-      <WorkspaceView v-if="state !== null" :state="state" :update="update" />
+      <WorkspaceView v-if="state !== null" :state="state" :updater="update" />
     </Transition>
   </div>
   <FooterPart />

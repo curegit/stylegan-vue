@@ -1,7 +1,7 @@
 import createClient from "openapi-fetch";
 import type { paths } from "./schemas";
 
-const api_location = "" + (import.meta.env.VITE_STYLEGAN_API ?? "http://localhost:8000");
+const api_location = "" + (import.meta.env.VITE_STYLEGAN_API || "http://localhost:8000");
 
 const client = createClient<paths>({ baseUrl: api_location });
 

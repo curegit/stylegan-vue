@@ -1,12 +1,12 @@
 export declare global {
   type WorkspaceState = {
-    model_id: string;
+    modelId: string;
     data: { gen: ImageData[] };
   };
 
   type ImageData = {
     data: string;
-    mime_type: string;
+    mimeType: string;
     width: number;
     height: number;
   };

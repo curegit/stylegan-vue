@@ -42,7 +42,7 @@ function update(newState: WorkspaceState) {
 
 function selectModel(name: string) {
   state.value = {
-    model_id: name,
+    modelId: name,
     data: { gen: [] },
   };
 }

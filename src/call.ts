@@ -1,9 +1,9 @@
 import createClient from "openapi-fetch";
 import type { paths } from "./schemas";
 
-const api_location = "" + (import.meta.env.VITE_STYLEGAN_API || "http://localhost:8000");
+const apiLocation = "" + (import.meta.env.VITE_STYLEGAN_API || "http://localhost:8000");
 
-const client = createClient<paths>({ baseUrl: api_location });
+const client = createClient<paths>({ baseUrl: apiLocation });
 
 const getModels = (() => {
   let cached: Model[] | null = null;
@@ -29,4 +29,4 @@ async function getModelsDict() {
   }, {});
 }
 
-export { api_location, client, getModels, getModelsDict };
+export { apiLocation, client, getModels, getModelsDict };

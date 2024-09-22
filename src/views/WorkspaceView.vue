@@ -16,25 +16,27 @@ const props = defineProps<{
 const filename = ref<string | undefined>(undefined);
 
 async function modelSpec() {
-  return (await getModelsDict())[props.state.model_id];
+  return (await getModelsDict())[props.state.modelId];
 }
 
 const gen = async () => {
-  const { data } = await client.POST("/{model_id}/generate", { params: { path: { model_id: props.state.model_id } } });
-
-  //const data = [...props.state.data, { data: res.data, width: res.width, height: res.height, mime: res.mime_type }];
-  const s = { ...props.state, ...[...props.state.data.gen, data] };
-  props.updater(s);
+  const { data } = await client.POST("/{model_id}/generate", { params: { path: { model_id: props.state.modelId } } });
+  if (data) {
+    //const s = {...props.state };
+    const s = props.state;
+    s.data.gen = [...s.data.gen, data];
+    props.updater(s);
+  }
 };
 
-const dataurl = (base64: string, mime_type: string = "image/png") => `data:${mime_type};base64,${base64}`;
+const dataurl = (base64: string, mimeType: string = "image/png") => `data:${mimeType};base64,${base64}`;
 
 async function name() {}
 
 function download(event: MouseEvent): void {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([JSON.stringify(props.state, null, 2)], { type: "application/json" }));
-  a.download = `${filename.value ?? props.state.model_id}.json`;
+  a.download = `${filename.value ?? props.state.modelId}.json`;
   a.dispatchEvent(new MouseEvent("click"));
 }
 
@@ -57,7 +59,7 @@ const l = ref<any>(undefined);
     <div id="output">
       <div>
         <SelectionItem v-for="(i, key) in state.data.gen" :key="key" :ref="l" :initial="true" :updater="(v) => {}">
-          <img :src="dataurl(i.data, i.mime_type)" :width="i.width" :height="i.height"
+          <img :src="dataurl(i.data, i.mimeType)" :width="i.width" :height="i.height"
         /></SelectionItem>
         <ComputingIndicator></ComputingIndicator>
       </div>

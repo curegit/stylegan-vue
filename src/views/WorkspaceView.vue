@@ -2,6 +2,7 @@
 import { ref, computed, VNode } from "vue";
 
 import { client, getModelsDict } from "../call";
+import { dataurl } from "../utils";
 import ImageGrid from "../components/ImageGrid.vue";
 
 import SelectionItem from "../components/SelectionItem.vue";
@@ -28,8 +29,6 @@ const gen = async () => {
     props.updater(s);
   }
 };
-
-const dataurl = (base64: string, mimeType: string = "image/png") => `data:${mimeType};base64,${base64}`;
 
 async function name() {}
 

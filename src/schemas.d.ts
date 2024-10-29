@@ -13,7 +13,7 @@ export interface paths {
     };
     /**
      * Welcome
-     * @description hello world message
+     * @description Returns a simple hello world message.
      */
     get: operations["root"];
     put?: never;
@@ -31,7 +31,10 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** Version */
+    /**
+     * Version
+     * @description Returns the current version of the application.
+     */
     get: operations["version"];
     put?: never;
     post?: never;
@@ -48,8 +51,11 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** Model List */
-    get: operations["model_list_models__get"];
+    /**
+     * Model List
+     * @description Returns a list of all available models with their information.
+     */
+    get: operations["models"];
     put?: never;
     post?: never;
     delete?: never;
@@ -67,7 +73,10 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** Generate */
+    /**
+     * Generate
+     * @description Generates an image using the specified model and parameters.
+     */
     post: operations["generate"];
     delete?: never;
     options?: never;
@@ -84,8 +93,13 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** Blend */
-    post: operations["blend__model_id__blend_post"];
+    /**
+     * Blend
+     * @description Blends (averages) multiple styles into a single image using the specified model.
+     *
+     *     Returns a SimpleImage object containing the blended image and style information.
+     */
+    post: operations["blend"];
     delete?: never;
     options?: never;
     head?: never;
@@ -101,7 +115,12 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** Mix */
+    /**
+     * Mix
+     * @description Mixes multiple styles into a single image using the specified model.
+     *
+     *     Returns a CompoundImage object containing the mixed image and styles information.
+     */
     post: operations["mix"];
     delete?: never;
     options?: never;
@@ -171,6 +190,7 @@ export interface components {
       lossy: boolean;
       /** Mimetype */
       mimeType: string;
+      example: components["schemas"]["Base64"];
     };
     /** NotFoundError */
     NotFoundError: {
@@ -269,7 +289,7 @@ export interface operations {
       };
     };
   };
-  model_list_models__get: {
+  models: {
     parameters: {
       query?: never;
       header?: never;
@@ -364,7 +384,7 @@ export interface operations {
       };
     };
   };
-  blend__model_id__blend_post: {
+  blend: {
     parameters: {
       query?: never;
       header?: never;

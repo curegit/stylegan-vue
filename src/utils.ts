@@ -1,6 +1,6 @@
 const nameof = <T>(name: Extract<keyof T, string>): string => name;
 
-export { nameof };
+const dataurl = (base64: string, mimeType: string = "image/png") => `data:${mimeType};base64,${base64}`;
 
 function now(): string {
   const now = new Date();
@@ -12,3 +12,5 @@ function now(): string {
 
   return `${year}${month}${date}-${hour}${minute}`;
 }
+
+export { nameof, dataurl };

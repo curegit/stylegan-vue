@@ -21,5 +21,7 @@ export declare global {
     description: string;
     width: number;
     height: number;
+    mimeType: string;
+    example: string;
   }
 }

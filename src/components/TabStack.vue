@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, useSlots, useId } from "vue";
+import { ref, useId } from "vue";
 
 interface Props {
   color?: string;
@@ -11,9 +11,7 @@ interface Props {
 
 const { color, activeColor, tabRadius, tabRadiusConcave, customTitles = {} } = defineProps<Props>();
 
-// FIXME: Vue bug?
-//defineSlots<{ [key: string]: (props: { title?: string }) => any }>();
-const slots = useSlots();
+const slots = defineSlots<{ [key: string]: (props: { title: string }) => any }>();
 
 const activatedTabKey = ref<null | string>(null);
 
@@ -49,7 +47,7 @@ const clipPathRightId = `clip-path-right-${useId()}`;
     </nav>
     <div class="tab-contents">
       <div v-for="(_, key) in $slots" v-show="isActive(key.toString())" :key="key" class="tab-pane">
-        <slot :name="key"></slot>
+        <slot :name="key" :title="customTitles[key] ?? key"></slot>
       </div>
     </div>
   </div>
@@ -57,21 +55,21 @@ const clipPathRightId = `clip-path-right-${useId()}`;
 
 <style>
 :root {
-  --tab-radius-default: 20px;
-  --tab-radius-concave-default: 20px;
+  --tab-radius-default: 18px;
+  --tab-radius-concave-default: 18px;
   --tab-color-default: #ddc385;
   --tab-active-color-default: #fff;
+}
+
+.tab-label {
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
 
 <style scoped>
-* {
-  --radius: v-bind("tabRadius ?? 'var(--tab-radius-default)'");
-  --radius-concave: v-bind("tabRadiusConcave ?? 'var(--tab-radius-concave-default)'");
-  --tab-color: v-bind("color ?? 'var(--tab-color-default)'");
-  --active-tab-color: v-bind("activeColor ?? 'var(--tab-active-color-default)'");
-}
-
 svg {
   position: absolute;
   width: 0;
@@ -84,58 +82,75 @@ svg {
   box-sizing: border-box;
 }
 
+.tab-bar {
+  --radius: v-bind("tabRadius ?? 'var(--tab-radius-default)'");
+  --radius-concave: v-bind("tabRadiusConcave ?? 'var(--tab-radius-concave-default)'");
+  --tab-color: v-bind("color ?? 'var(--tab-color-default)'");
+  --active-tab-color: v-bind("activeColor ?? 'var(--tab-active-color-default)'");
+}
+
 .tabs {
   display: flex;
+  flex-flow: row wrap;
 }
 
 .tabs li {
   display: block;
   position: relative;
-}
 
-.tabs a {
-  display: inline-block;
-  padding: 10px 40px;
-  text-decoration: none;
+  a {
+    display: block;
+    padding: 6px 24px;
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+    background: var(--tab-color);
+    text-decoration: none;
+    cursor: pointer;
+  }
 
-  background: var(--tab-color);
+  a:before {
+    content: "";
+    position: absolute;
+    width: var(--radius-concave);
+    height: var(--radius-concave);
+    bottom: 0;
+    left: calc(-1 * var(--radius-concave));
+    background: var(--tab-color);
+    clip-path: v-bind("`url('#${clipPathLeftId}')`");
+    pointer-events: none;
+  }
 
-  border-top-left-radius: var(--radius);
-  border-top-right-radius: var(--radius);
-}
-
-.tabs li {
-  a:before,
   a:after {
     content: "";
+    position: absolute;
+    width: var(--radius-concave);
+    height: var(--radius-concave);
+    bottom: 0;
+    right: calc(-1 * var(--radius-concave));
     background: var(--tab-color);
-    width: var(--radius);
-    height: var(--radius);
-  }
-  a:before {
-    position: absolute;
-    bottom: 0;
-    left: calc(-1 * var(--radius));
-    clip-path: v-bind("`url('#${clipPathLeftId}')`");
-  }
-  a:after {
-    position: absolute;
-    bottom: 0;
-    right: calc(-1 * var(--radius));
     clip-path: v-bind("`url('#${clipPathRightId}')`");
+    pointer-events: none;
   }
 }
+
 .tabs .active {
   z-index: 10;
 
-  a:after,
+  a {
+    background: var(--active-tab-color);
+    cursor: auto;
+  }
+
   a:before {
     background: var(--active-tab-color);
+    pointer-events: revert;
+    cursor: auto;
   }
-}
-.tabs .active a {
-  /* Colors when tab is active */
-  background: var(--active-tab-color);
-  color: black;
+
+  a:after {
+    background: var(--active-tab-color);
+    pointer-events: revert;
+    cursor: auto;
+  }
 }
 </style>

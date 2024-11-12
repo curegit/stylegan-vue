@@ -4,6 +4,8 @@ const props = defineProps<{
   thickness?: string;
   duration?: number;
   message?: string;
+  ringColor?: string;
+  ringHighlightColor?: string;
 }>();
 
 const durationText = props.duration !== undefined && props.duration !== null ? `${props.duration}s` : props.duration;
@@ -11,8 +13,8 @@ const durationText = props.duration !== undefined && props.duration !== null ? `
 
 <template>
   <div class="loading-indicator">
-    <div class="loading-circle"></div>
-    <div class="loading-message">{{ message ?? "Loading" }} ...</div>
+    <div class="loading-ring"></div>
+    <div class="loading-message">{{ message ?? "Loading ..." }}</div>
   </div>
 </template>
 
@@ -21,6 +23,14 @@ const durationText = props.duration !== undefined && props.duration !== null ? `
   --loading-indicator-size-default: 32px;
   --loading-indicator-thickness-default: 4px;
   --loading-indicator-duration-default: 0.8s;
+  --loading-indicator-ring-color-default: rgba(0, 0, 0, 0.25);
+  --loading-indicator-ring-highlight-color-default: black;
+}
+</style>
+
+<style>
+.loading-message {
+  font-size: 90%;
 }
 </style>
 
@@ -29,6 +39,8 @@ const durationText = props.duration !== undefined && props.duration !== null ? `
   --size: v-bind("size ?? 'var(--loading-indicator-size-default)'");
   --thickness: v-bind("thickness ?? 'var(--loading-indicator-thickness-default)'");
   --duration: v-bind("durationText ?? 'var(--loading-indicator-duration-default)'");
+  --ring-color: v-bind("ringColor ?? 'var(--loading-indicator-ring-color-default)'");
+  --ring-highlight-color: v-bind("ringHighlightColor ?? 'var(--loading-indicator-ring-highlight-color-default)'");
 }
 
 .loading-indicator {
@@ -37,17 +49,12 @@ const durationText = props.duration !== undefined && props.duration !== null ? `
   align-items: center;
 }
 
-.loading-message {
-  color: #333;
-  font-size: 90%;
-}
-
-.loading-circle {
+.loading-ring {
   width: var(--size);
   height: var(--size);
   margin: 3px;
-  border: var(--thickness) rgba(0, 0, 0, 0.25) solid;
-  border-top: var(--thickness) black solid;
+  border: var(--thickness) var(--ring-color) solid;
+  border-top: var(--thickness) var(--ring-highlight-color) solid;
   border-radius: 50%;
   animation: rotation var(--duration) infinite linear;
 }

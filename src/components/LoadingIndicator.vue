@@ -12,10 +12,7 @@ const durationText = props.duration !== undefined && props.duration !== null ? `
 <template>
   <div class="loading-indicator">
     <div class="loading-circle"></div>
-    <div class="loading-message">
-      <span class="loading-message-text">{{ message ?? "Loading" }}</span>
-      <span class="loading-ellipsis">...</span>
-    </div>
+    <div class="loading-message">{{ message ?? "Loading" }} ...</div>
   </div>
 </template>
 

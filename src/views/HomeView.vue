@@ -46,7 +46,7 @@ function upload(event: Event): void {
   <main>
     <h2>Model Select</h2>
     <LoadingIndicator v-if="models === undefined"></LoadingIndicator>
-    <div v-else-if="models === null">Error!!!</div>
+    <div v-else-if="models === null">Sorry, we couldn't load the models. Please try again later.</div>
     <div v-else>
       <ul>
         <li v-for="val in models" :key="val.id">

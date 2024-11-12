@@ -56,10 +56,10 @@ const durationText = props.duration !== undefined && props.duration !== null ? `
   border: var(--thickness) var(--ring-color) solid;
   border-top: var(--thickness) var(--ring-highlight-color) solid;
   border-radius: 50%;
-  animation: rotation var(--duration) infinite linear;
+  animation: loadingIndicatorRotation var(--duration) infinite linear;
 }
 
-@keyframes rotation {
+@keyframes loadingIndicatorRotation {
   from {
     transform: rotate(0deg);
   }

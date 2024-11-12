@@ -3,6 +3,7 @@ const props = defineProps<{
   size?: string;
   thickness?: string;
   duration?: number;
+  message?: string;
 }>();
 
 const durationText = props.duration !== undefined && props.duration !== null ? `${props.duration}s` : props.duration;
@@ -12,7 +13,7 @@ const durationText = props.duration !== undefined && props.duration !== null ? `
   <div class="loading-indicator">
     <div class="loading-circle"></div>
     <div class="loading-message">
-      <slot>Loading ...</slot>
+      {{ message ?? "Loading ..." }}
     </div>
   </div>
 </template>

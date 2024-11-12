@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineProps<{
+  barColor?: string;
+}>();
+</script>
 
 <template>
   <div class="indicator">
@@ -7,26 +11,38 @@
 </template>
 
 <style>
+:root {
+  --computing-indicator-bar-color-default: #000;
+}
+</style>
+
+<style scoped>
+.indicator {
+  --bar-color: v-bind("barColor ?? 'var(--computing-indicator-bar-color-default)'");
+}
+
 .sp {
   width: 32px;
   height: 32px;
 }
+
 .bar {
   width: 50px;
   height: 18px;
-  border: 1px #000 solid;
+  border: 1px var(--bar-color) solid;
   border-radius: 4px;
-  background: linear-gradient(-60deg, transparent 0%, transparent 50%, #000 50%, #000 75%, transparent 75%, transparent);
+  background: linear-gradient(-60deg, transparent 0%, transparent 50%, var(--bar-color) 50%, var(--bar-color) 75%, transparent 75%, transparent);
   background-size: 20px 30px;
   background-position: 0px 0px;
   animation: spLoadBar 0.8s infinite linear;
 }
+
 @keyframes spLoadBar {
   from {
     background-position: 0px 0px;
   }
   to {
-    background-position: -20px 0px;
+    background-position: 20px 0px;
   }
 }
 </style>

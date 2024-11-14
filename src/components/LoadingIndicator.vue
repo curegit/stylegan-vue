@@ -26,9 +26,7 @@ const durationText = props.duration !== undefined && props.duration !== null ? `
   --loading-indicator-ring-color-default: rgba(0, 0, 0, 0.25);
   --loading-indicator-ring-highlight-color-default: black;
 }
-</style>
 
-<style>
 :where(.loading-message) {
   font-size: 90%;
 }

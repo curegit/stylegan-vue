@@ -18,6 +18,19 @@ const { fit = "fill", thumbnailRatio = 0.5 } = props;
   </div>
 </template>
 
+<style>
+:where(.thumbnail-card) {
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background: linear-gradient(0deg, #ffffff70, #ffffffbf);
+}
+
+:where(.thumbnail-card-image) {
+  border-radius: 8px;
+}
+</style>
+
 <style scoped>
 .thumbnail-card {
   display: grid;
@@ -32,18 +45,5 @@ const { fit = "fill", thumbnailRatio = 0.5 } = props;
 
 .thumbnail-card-image.square {
   aspect-ratio: 1 / 1;
-}
-</style>
-
-<style>
-:where(.thumbnail-card) {
-  gap: 10px;
-  padding: 10px;
-  border-radius: 8px;
-  background: linear-gradient(0deg, #ffffff70, #ffffffbf);
-}
-
-:where(.thumbnail-card-image) {
-  border-radius: 8px;
 }
 </style>

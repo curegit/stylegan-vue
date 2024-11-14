@@ -29,7 +29,7 @@ const durationText = props.duration !== undefined && props.duration !== null ? `
 </style>
 
 <style>
-.loading-message {
+:where(.loading-message) {
   font-size: 90%;
 }
 </style>

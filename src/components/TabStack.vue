@@ -61,7 +61,7 @@ const clipPathRightId = `clip-path-right-${useId()}`;
   --tab-active-color-default: #fff;
 }
 
-.tab-label {
+:where(.tab-label) {
   max-width: 180px;
   white-space: nowrap;
   overflow: hidden;

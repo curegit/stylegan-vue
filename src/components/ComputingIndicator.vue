@@ -19,13 +19,13 @@ defineProps<{
   --computing-indicator-speed-factor-default: 1;
 }
 
-.computing-indicator {
+:where(.computing-indicator) {
   display: flex;
   flex-wrap: wrap;
   min-width: 50px;
 }
 
-.computing-indicator-bar {
+:where(.computing-indicator-bar) {
   width: 100%;
   border-radius: 4px;
   background: transparent;

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
-
 import { getModels } from "../call";
+import { dataurl } from "../utils";
+import ItemCard from "../components/ThumbnailCard.vue";
 import LoadingIndicator from "../components/LoadingIndicator.vue";
-import ModelCard from "../components/ModelCard.vue";
 
 const props = defineProps<{
   selector: (name: string) => void;
@@ -30,10 +30,12 @@ function upload(event: Event): void {
   }
 }
 
+const loadingMinDelayMs = 800;
+const timeoutMs = 5000;
+
 (async () => {
-  const loadingMinDelay = new Promise((r) => setTimeout(r, 600));
-  await loadingMinDelay;
-  const timeoutPromise = new Promise<never>((_, reject) => setTimeout(reject, 5000));
+  await new Promise((r) => setTimeout(r, loadingMinDelayMs));
+  const timeoutPromise = new Promise<never>((_, reject) => setTimeout(reject, timeoutMs));
   const modelsPromise = await Promise.race([getModels(), timeoutPromise]).then(
     (models) => models,
     (error) => (console.error(error), null),
@@ -44,13 +46,16 @@ function upload(event: Event): void {
 
 <template>
   <main>
-    <h2>Model Select</h2>
+    <h2>New Workspace</h2>
     <LoadingIndicator v-if="models === undefined"></LoadingIndicator>
     <div v-else-if="models === null">Sorry, we couldn't load the models. Please try again later.</div>
     <div v-else>
-      <ul>
+      <ul class="model-list">
         <li v-for="val in models" :key="val.id">
-          <ModelCard :model="val" @click="() => props.selector(val.id)"></ModelCard>
+          <ItemCard class="model-list-card" :thumbnail="dataurl(val.example, val.mimeType)" @click="() => props.selector(val.id)">
+            <h3 class="name">{{ val.name }}</h3>
+            <div class="description">{{ val.description }} ({{ val.width }}x{{ val.height }})</div>
+          </ItemCard>
         </li>
       </ul>
       <h2>Load Workspace</h2>
@@ -58,3 +63,27 @@ function upload(event: Event): void {
     </div>
   </main>
 </template>
+
+<style scoped>
+.model-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  align-items: stretch;
+  gap: 20px;
+}
+
+.model-list li {
+  display: block;
+}
+
+.model-list-card {
+  height: 100%;
+  cursor: pointer;
+}
+
+@media (any-hover: hover) {
+  .model-list-card:hover {
+    background-color: #fff6;
+  }
+}
+</style>

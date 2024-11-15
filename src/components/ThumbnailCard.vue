@@ -20,14 +20,14 @@ const { fit = "fill", thumbnailRatio = 0.5 } = props;
 
 <style>
 :where(.thumbnail-card) {
-  gap: 10px;
-  padding: 10px;
-  border-radius: 8px;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 10px;
   background: linear-gradient(0deg, #ffffff70, #ffffffbf);
 }
 
 :where(.thumbnail-card-image) {
-  border-radius: 8px;
+  border-radius: 10px;
 }
 </style>
 
@@ -40,6 +40,8 @@ const { fit = "fill", thumbnailRatio = 0.5 } = props;
 .thumbnail-card-image {
   width: 100%;
   height: auto;
+  margin: 0;
+  padding: 0;
   object-fit: v-bind(fit);
 }
 

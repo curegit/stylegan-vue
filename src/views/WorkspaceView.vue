@@ -5,9 +5,13 @@ import { client, getModelsDict } from "../call";
 import { dataurl } from "../utils";
 import ImageGrid from "../components/ImageGrid.vue";
 
+import HoriSplit from "../layouts/HoriSplit.vue";
+
 import SelectionItem from "../components/SelectionItem.vue";
 
 import ComputingIndicator from "../components/ComputingIndicator.vue";
+
+import TabStack from "../components/TabStack.vue";
 
 const props = defineProps<{
   state: WorkspaceState;
@@ -44,9 +48,9 @@ const setname = (event: Event) => {
   filename.value = t.value;
 };
 
-SelectionItem.checked;
-
 const l = ref<any>(undefined);
+
+const array = ref<any>({ あああああ: "ああああ", null: 111, iiii: 1111, pppp: "23344" });
 </script>
 
 <template>
@@ -55,22 +59,26 @@ const l = ref<any>(undefined);
     <button @click="gen">GEN</button>
     <button @click="download">DOWNLOAD</button>
     <input type="text" @change="setname" />
-    <div id="output">
-      <div>
-        <SelectionItem v-for="(i, key) in state.data.gen" :key="key" :ref="l" :initial="true" :updater="(v) => {}">
-          <img :src="dataurl(i.data, i.mimeType)" :width="i.width" :height="i.height"
-        /></SelectionItem>
-        <ComputingIndicator></ComputingIndicator>
-      </div>
-    </div>
+
+    <TabStack :custom-titles="{ あああああ: 'nnn' }">
+      <template #generate :props="122">
+        <div id="output">
+          <HoriSplit>
+            <template #left>
+              <div>
+                <ImageGrid>
+                  <template v-for="(i, key) in state.data.gen" :key="key" #[key]>
+                    <img :src="dataurl(i.data, i.mimeType)" :width="i.width" :height="i.height" />
+                  </template>
+                </ImageGrid>
+                <ComputingIndicator :scale="1.5"></ComputingIndicator>
+              </div>
+            </template>
+            <template #right>ss </template>
+          </HoriSplit>
+        </div>
+      </template>
+      <template v-for="(label, index) in array" :key="index" #[index] :props="1">{{ label }}</template>
+    </TabStack>
   </main>
 </template>
-
-<style scoped>
-#output {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: left;
-}
-</style>

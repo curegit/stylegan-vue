@@ -1,25 +1,10 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-
-const props = defineProps<{
-  initial: boolean;
-  updater: (newValue: boolean) => void;
-}>();
-
-const checked = ref<boolean>(props.initial);
-
-watch(checked, (newValue) => {
-  props.updater(newValue);
-});
-
-defineExpose({
-  checked,
-});
+const selected = defineModel<boolean>({ required: true, default: false });
 </script>
 
 <template>
-  <label :class="{ selected: checked }">
-    <input v-model="checked" type="checkbox" />
+  <label :class="{ selected: selected }">
+    <input v-model="selected" type="checkbox" />
     <div>
       <slot></slot>
     </div>

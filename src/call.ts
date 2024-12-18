@@ -29,4 +29,18 @@ async function getModelsDict() {
   }, {});
 }
 
-export { apiLocation, client, getModels, getModelsDict };
+let prevRun = Promise.resolve();
+
+function runModel(path: Parameters<typeof client.POST>[0], params: Parameters<typeof client.POST>[1], timeoutMs: number = 5000, serial: boolean = true) {
+  let resolver = () => {};
+  const waitRun = new Promise<void>((resolve) => {
+    resolver = () => resolve();
+  });
+  const waitPrevRun = serial ? prevRun : Promise.resolve();
+  prevRun = waitRun;
+  const task = waitPrevRun.then(() => client.POST(path, params).finally(() => resolver()));
+  const timeoutPromise = new Promise<never>((_, reject) => setTimeout(reject, timeoutMs));
+  return Promise.race([task, timeoutPromise]).finally(() => resolver());
+}
+
+export { apiLocation, client, getModels, getModelsDict, runModel };

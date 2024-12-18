@@ -13,6 +13,8 @@ import ComputingIndicator from "../components/ComputingIndicator.vue";
 
 import TabStack from "../components/TabStack.vue";
 
+import { runModel } from "../call";
+
 const props = defineProps<{
   state: WorkspaceState;
   updater: (s: WorkspaceState) => void;
@@ -25,7 +27,10 @@ async function modelSpec() {
 }
 
 const gen = async () => {
-  const { data } = await client.POST("/{model_id}/generate", { params: { path: { model_id: props.state.modelId } } });
+  const task = runModel("/{model_id}/generate", { params: { path: { model_id: props.state.modelId } } });
+
+  gen_pending.value.push(task);
+  const { data } = await task;
   if (data) {
     //const s = {...props.state };
     const s = props.state;

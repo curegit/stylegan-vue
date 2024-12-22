@@ -1,32 +1,37 @@
 <script setup lang="ts">
-import { ref } from "vue";
-
 import SelectionItem from "../components/SelectionItem.vue";
 
-const selecteds = ref<{ [key: string]: boolean }>({});
+const selection = defineModel<{ [key: string]: boolean }>({ required: true, default: {} });
 
-function selecs(key: string) {
-  return key in selecteds.value;
+interface img {
+  src: string;
+  alt?: string;
+  width?: number;
+  height?: number;
 }
+
+defineProps<{
+  images: { [key: string]: img };
+}>();
 </script>
 
 <template>
-  <div>
-    {{ selecteds }}
-    <div>
-      <div class="tab-contents">
-        <div v-for="(_, key) in $slots" :key="key">
-          <SelectionItem v-model="selecteds[key]">
-            <slot :name="key"></slot>
-          </SelectionItem>
-        </div>
-      </div>
+  <div class="image-grid">
+    <div v-for="(i, key) in images" :key="key">
+      <SelectionItem v-model="selection[key]">
+        <img :src="i.src" :width="i.width" :height="i.height" :alt="i.alt" />
+      </SelectionItem>
     </div>
+    <template v-for="(_, key) in $slots" :key="key">
+      <slot :name="key"></slot>
+    </template>
   </div>
 </template>
 
 <style>
-#view {
-  padding: 20px;
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
 }
 </style>

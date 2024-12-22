@@ -1,7 +1,16 @@
 export declare global {
   type WorkspaceState = {
     modelId: string;
-    data: { gen: ImageData[] };
+    data: {
+      generated: {
+        [key: string]: {
+          groupName?: string;
+          images: {
+            [key: string]: SimpleImage;
+          };
+        };
+      };
+    };
   };
 
   type ImageData = {

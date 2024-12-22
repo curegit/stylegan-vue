@@ -1,7 +1,5 @@
-<script setup lang="ts"></script>
-
 <template>
-  <div class="horizontal">
+  <div class="horizontal-splitter">
     <section>
       <slot name="left"></slot>
     </section>
@@ -12,7 +10,7 @@
 </template>
 
 <style scoped>
-.horizontal {
+.horizontal-splitter {
   display: grid;
   grid-template-columns: 1fr 300px;
 }

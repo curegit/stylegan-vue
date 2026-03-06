@@ -11,7 +11,7 @@ import ComputingIndicator from "../components/ComputingIndicator.vue";
 
 import TabStack from "../components/TabStack.vue";
 
-import { runModel } from "../call";
+import { runModelGenerate } from "../call";
 
 const props = defineProps<{
   state: WorkspaceState;
@@ -28,8 +28,8 @@ function uuid() {
   return URL.createObjectURL(new Blob()).slice(-36);
 }
 
-const gen = async () => {
-  const task = runModel("/{model_id}/generate", { params: { path: { model_id: props.state.modelId } } });
+const generate_new_image = async () => {
+  const task = runModelGenerate(props.state.modelId);
 
   gen_pending.value.push(task);
   const { data, error } = await task;
@@ -37,22 +37,20 @@ const gen = async () => {
   if (data) {
     const s = props.state;
 
-    s.data.generated.default.images[uuid()] = data as any;
+    s.data.generated.default.images[uuid()] = data;
     gen_pending.value = gen_pending.value.filter((x) => x !== task);
     props.updater(s);
   }
 };
 
-async function name() {}
-
-function download(event: MouseEvent): void {
+function download_workspace(event: MouseEvent): void {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([JSON.stringify(props.state, null, 2)], { type: "application/json" }));
   a.download = `${filename.value ?? props.state.modelId}.json`;
   a.dispatchEvent(new MouseEvent("click"));
 }
 
-const setname = (event: Event) => {
+const set_filename = (event: Event) => {
   const t = event.currentTarget as HTMLInputElement;
   filename.value = t.value;
 };
@@ -95,9 +93,9 @@ function mp(image: { [key: string]: SimpleImage }) {
 <template>
   <main>
     <h2>Workspace</h2>
-    <button @click="gen">GEN</button>
-    <button @click="download">DOWNLOAD</button>
-    <input type="text" @change="setname" />
+    <button @click="generate_new_image">GEN</button>
+    <button @click="download_workspace">DOWNLOAD</button>
+    <input type="text" @change="set_filename" />
 
     <TabStack :custom-titles="customTabTitles">
       <template #generate>

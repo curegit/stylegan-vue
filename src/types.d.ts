@@ -3,6 +3,12 @@ export declare global {
     modelId: string;
     data: {
       generated: {
+        default: {
+          groupName?: string;
+          images: {
+            [key: string]: SimpleImage;
+          };
+        };
         [key: string]: {
           groupName?: string;
           images: {

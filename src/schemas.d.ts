@@ -4,526 +4,619 @@
  */
 
 export interface paths {
-  "/": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Welcome
+         * @description Returns a simple hello world message.
+         */
+        get: operations["root"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Welcome
-     * @description Returns a simple hello world message.
-     */
-    get: operations["root"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/version": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/version": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Version
+         * @description Returns the current version of the application.
+         */
+        get: operations["version"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Version
-     * @description Returns the current version of the application.
-     */
-    get: operations["version"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/models/": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/models/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Model List
+         * @description Returns a list of all available models with their information.
+         */
+        get: operations["models"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Model List
-     * @description Returns a list of all available models with their information.
-     */
-    get: operations["models"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/{model_id}/generate": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/{model_id}/generate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Generate
+         * @description Generates an image using the specified model and parameters.
+         */
+        post: operations["generate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Generate
-     * @description Generates an image using the specified model and parameters.
-     */
-    post: operations["generate"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/{model_id}/blend": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/{model_id}/blend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Blend
+         * @description Blends (averages) multiple styles into a single image using the specified model.
+         *
+         *     Returns a SimpleImage object containing the blended image and style information.
+         */
+        post: operations["blend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Blend
-     * @description Blends (averages) multiple styles into a single image using the specified model.
-     *
-     *     Returns a SimpleImage object containing the blended image and style information.
-     */
-    post: operations["blend"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/{model_id}/mix": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/{model_id}/mix": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Mix
+         * @description Mixes multiple styles into a single image using the specified model.
+         *
+         *     Returns a CompoundImage object containing the mixed image and styles information.
+         */
+        post: operations["mix"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Mix
-     * @description Mixes multiple styles into a single image using the specified model.
-     *
-     *     Returns a CompoundImage object containing the mixed image and styles information.
-     */
-    post: operations["mix"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    Base64: string;
-    /** CompoundImage */
-    CompoundImage: {
-      /** Model */
-      model: string;
-      /** Width */
-      width: number;
-      /** Height */
-      height: number;
-      /** Mimetype */
-      mimeType: string;
-      data: components["schemas"]["Base64"];
-      /** Styles */
-      styles: components["schemas"]["Base64"][];
+    schemas: {
+        Base64: string;
+        /** CompoundImage */
+        CompoundImage: {
+            /**
+             * Model
+             * @example animal
+             */
+            model: string;
+            /**
+             * Width
+             * @example 256
+             */
+            width: number;
+            /**
+             * Height
+             * @example 256
+             */
+            height: number;
+            /**
+             * Mimetype
+             * @example image/png
+             */
+            mimeType: string;
+            /** @example U2FpbG9yIE1vb24g8J+MmQ== */
+            data: components["schemas"]["Base64"];
+            /**
+             * Styles
+             * @example [
+             *       "QWlrYXRzdSEg8J+pt/CfjJ/wn46k",
+             *       "QWlrYXRzdSEg8J+pt/CfjJ/wn46k",
+             *       "QWlrYXRzdSEg8J+pt/CfjJ/wn46k",
+             *       "QWlrYXRzdSEg8J+pt/CfjJ/wn46k",
+             *       "TWVybWFpZCBNZWxvZHkg8J+OtiBQaWNoaSBQaWNoaSBQaXRjaA==",
+             *       "TWVybWFpZCBNZWxvZHkg8J+OtiBQaWNoaSBQaWNoaSBQaXRjaA==",
+             *       "TWVybWFpZCBNZWxvZHkg8J+OtiBQaWNoaSBQaWNoaSBQaXRjaA=="
+             *     ]
+             */
+            styles: components["schemas"]["Base64"][];
+        };
+        /** DeserializationError */
+        DeserializationError: {
+            /** Detail */
+            detail?: string | null;
+        };
+        /** EntityValidationError */
+        EntityValidationError: {
+            /** Detail */
+            detail?: unknown;
+        };
+        /** GenerateRequestBody */
+        GenerateRequestBody: {
+            /** @example U2FpbG9yIE1vb24g8J+MmQ== */
+            latent?: components["schemas"]["Base64"] | null;
+        };
+        /** HTTPError */
+        HTTPError: {
+            /** Detail */
+            detail?: unknown;
+        };
+        /** HTTPNotFoundError */
+        HTTPNotFoundError: {
+            detail?: components["schemas"]["NotFoundError"] | null;
+        };
+        /** Model */
+        Model: {
+            /**
+             * Id
+             * @example animal
+             */
+            id: string;
+            /**
+             * Name
+             * @example My Animal Model
+             */
+            name: string;
+            /** Description */
+            description: string;
+            /**
+             * Conditional
+             * @example true
+             */
+            conditional: boolean;
+            /**
+             * Labels
+             * @example [
+             *       "Cat",
+             *       "Dog",
+             *       "Unicorn"
+             *     ]
+             */
+            labels: string[] | null;
+            /**
+             * Width
+             * @example 256
+             */
+            width: number;
+            /**
+             * Height
+             * @example 256
+             */
+            height: number;
+            /**
+             * Lossy
+             * @example false
+             */
+            lossy: boolean;
+            /**
+             * Mimetype
+             * @example image/png
+             */
+            mimeType: string;
+            /** @example TWVybWFpZCBNZWxvZHkg8J+OtiBQaWNoaSBQaWNoaSBQaXRjaA== */
+            example: components["schemas"]["Base64"];
+        };
+        /** NotFoundError */
+        NotFoundError: {
+            /** Type */
+            type: string;
+            /** Name */
+            name: string;
+            /** Msg */
+            msg: string;
+        };
+        /** ReconstructionRequestBody */
+        ReconstructionRequestBody: {
+            /**
+             * Styles
+             * @example [
+             *       "8J+QiOKAjeKsm1Rva3lvIE1ldyBNZXc=",
+             *       "UHJlY3VyZSDwn6m18J+pt/Cfkps=",
+             *       "QWlrYXRzdSEg8J+pt/CfjJ/wn46k"
+             *     ]
+             */
+            styles: components["schemas"]["Base64"][];
+        };
+        /** RequestLimitError */
+        RequestLimitError: {
+            /** Detail */
+            detail?: string | null;
+        };
+        /** SimpleImage */
+        SimpleImage: {
+            /**
+             * Model
+             * @example animal
+             */
+            model: string;
+            /**
+             * Width
+             * @example 256
+             */
+            width: number;
+            /**
+             * Height
+             * @example 256
+             */
+            height: number;
+            /**
+             * Mimetype
+             * @example image/png
+             */
+            mimeType: string;
+            /** @example U2FpbG9yIE1vb24g8J+MmQ== */
+            data: components["schemas"]["Base64"];
+            /** @example 8J+QiOKAjeKsm1Rva3lvIE1ldyBNZXc= */
+            style: components["schemas"]["Base64"];
+        };
+        /** SimplePureImage */
+        SimplePureImage: {
+            /**
+             * Model
+             * @example animal
+             */
+            model: string;
+            /**
+             * Width
+             * @example 256
+             */
+            width: number;
+            /**
+             * Height
+             * @example 256
+             */
+            height: number;
+            /**
+             * Mimetype
+             * @example image/png
+             */
+            mimeType: string;
+            /** @example U2FpbG9yIE1vb24g8J+MmQ== */
+            data: components["schemas"]["Base64"];
+            /** @example 8J+QiOKAjeKsm1Rva3lvIE1ldyBNZXc= */
+            style: components["schemas"]["Base64"];
+            /**
+             * Label
+             * @example Cat
+             */
+            label: string | null;
+            /** @example UHJlY3VyZSDwn6m18J+pt/Cfkps= */
+            latent: components["schemas"]["Base64"];
+        };
     };
-    /** DeserializationError */
-    DeserializationError: {
-      /** Detail */
-      detail?: string | null;
-    };
-    /** EntityValidationError */
-    EntityValidationError: {
-      /** Detail */
-      detail?: unknown;
-    };
-    /** GenerateRequestBody */
-    GenerateRequestBody: {
-      latent?: components["schemas"]["Base64"] | null;
-    };
-    /** HTTPError */
-    HTTPError: {
-      /** Detail */
-      detail?: unknown;
-    };
-    /** HTTPNotFoundError */
-    HTTPNotFoundError: {
-      detail?: components["schemas"]["NotFoundError"] | null;
-    };
-    /** Model */
-    Model: {
-      /** Id */
-      id: string;
-      /** Name */
-      name: string;
-      /** Description */
-      description: string;
-      /** Conditional */
-      conditional: boolean;
-      /** Labels */
-      labels: string[] | null;
-      /** Width */
-      width: number;
-      /** Height */
-      height: number;
-      /** Lossy */
-      lossy: boolean;
-      /** Mimetype */
-      mimeType: string;
-      example: components["schemas"]["Base64"];
-    };
-    /** NotFoundError */
-    NotFoundError: {
-      /** Type */
-      type: string;
-      /** Name */
-      name: string;
-      /** Msg */
-      msg: string;
-    };
-    /** ReconstructionRequestBody */
-    ReconstructionRequestBody: {
-      /** Styles */
-      styles: components["schemas"]["Base64"][];
-    };
-    /** RequestLimitError */
-    RequestLimitError: {
-      /** Detail */
-      detail?: string | null;
-    };
-    /** SimpleImage */
-    SimpleImage: {
-      /** Model */
-      model: string;
-      /** Width */
-      width: number;
-      /** Height */
-      height: number;
-      /** Mimetype */
-      mimeType: string;
-      data: components["schemas"]["Base64"];
-      style: components["schemas"]["Base64"];
-    };
-    /** SimplePureImage */
-    SimplePureImage: {
-      /** Model */
-      model: string;
-      /** Width */
-      width: number;
-      /** Height */
-      height: number;
-      /** Mimetype */
-      mimeType: string;
-      data: components["schemas"]["Base64"];
-      style: components["schemas"]["Base64"];
-      /** Label */
-      label: string | null;
-      latent: components["schemas"]["Base64"];
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  root: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    root: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    version: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        content: {
-          "application/json": string;
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
         };
-      };
     };
-  };
-  version: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    models: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Model"][];
+                };
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    generate: {
+        parameters: {
+            query?: {
+                label?: string | null;
+                psi?: number;
+                sd?: number;
+            };
+            header?: never;
+            path: {
+                model_id: string;
+            };
+            cookie?: never;
         };
-        content: {
-          "application/json": string;
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["GenerateRequestBody"] | null;
+            };
         };
-      };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimplePureImage"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPNotFoundError"];
+                };
+            };
+            /** @description Unsupported Media Type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeserializationError"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntityValidationError"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RequestLimitError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPError"];
+                };
+            };
+        };
     };
-  };
-  models: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    blend: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReconstructionRequestBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleImage"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPNotFoundError"];
+                };
+            };
+            /** @description Unsupported Media Type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeserializationError"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntityValidationError"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RequestLimitError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPError"];
+                };
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    mix: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model_id: string;
+            };
+            cookie?: never;
         };
-        content: {
-          "application/json": components["schemas"]["Model"][];
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReconstructionRequestBody"];
+            };
         };
-      };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CompoundImage"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPNotFoundError"];
+                };
+            };
+            /** @description Unsupported Media Type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeserializationError"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntityValidationError"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RequestLimitError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPError"];
+                };
+            };
+        };
     };
-  };
-  generate: {
-    parameters: {
-      query?: {
-        label?: string | null;
-        psi?: number;
-        sd?: number;
-      };
-      header?: never;
-      path: {
-        model_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: {
-      content: {
-        "application/json": components["schemas"]["GenerateRequestBody"] | null;
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["SimplePureImage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPNotFoundError"];
-        };
-      };
-      /** @description Unsupported Media Type */
-      415: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["DeserializationError"];
-        };
-      };
-      /** @description Unprocessable Entity */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["EntityValidationError"];
-        };
-      };
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RequestLimitError"];
-        };
-      };
-      /** @description Service Unavailable */
-      503: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPError"];
-        };
-      };
-    };
-  };
-  blend: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        model_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ReconstructionRequestBody"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["SimpleImage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPNotFoundError"];
-        };
-      };
-      /** @description Unsupported Media Type */
-      415: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["DeserializationError"];
-        };
-      };
-      /** @description Unprocessable Entity */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["EntityValidationError"];
-        };
-      };
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RequestLimitError"];
-        };
-      };
-      /** @description Service Unavailable */
-      503: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPError"];
-        };
-      };
-    };
-  };
-  mix: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        model_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ReconstructionRequestBody"];
-      };
-    };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["CompoundImage"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPNotFoundError"];
-        };
-      };
-      /** @description Unsupported Media Type */
-      415: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["DeserializationError"];
-        };
-      };
-      /** @description Unprocessable Entity */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["EntityValidationError"];
-        };
-      };
-      /** @description Too Many Requests */
-      429: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["RequestLimitError"];
-        };
-      };
-      /** @description Service Unavailable */
-      503: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPError"];
-        };
-      };
-    };
-  };
 }

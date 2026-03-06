@@ -43,7 +43,13 @@ function update(newState: WorkspaceState) {
 function selectModel(name: string) {
   state.value = {
     modelId: name,
-    data: { gen: [] },
+    data: {
+      generated: {
+        default: {
+          images: {},
+        },
+      },
+    },
   };
 }
 
@@ -63,9 +69,3 @@ function reset() {
   </div>
   <FooterPart />
 </template>
-
-<style>
-#view {
-  padding: 20px;
-}
-</style>

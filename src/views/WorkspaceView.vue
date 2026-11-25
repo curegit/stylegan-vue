@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import { dataurl } from "../utils";
+import { getModelsDict, runModelGenerate } from "../call";
+import { dataurl, now } from "../utils";
 import ImageGrid from "../components/ImageGrid.vue";
 
 import HorizontalSplitter from "../components/HorizontalSplitter.vue";
@@ -10,14 +11,23 @@ import ComputingIndicator from "../components/ComputingIndicator.vue";
 
 import TabStack from "../components/TabStack.vue";
 
-import { runModelGenerate } from "../call";
-
 const props = defineProps<{
   state: WorkspaceState;
   updater: (s: WorkspaceState) => void;
 }>();
 
-const filename = ref<string | undefined>(undefined);
+const stamp = now();
+const modelLabel = ref(props.state.modelId);
+const filename = ref(`${modelLabel.value}-${stamp}`);
+let filenameTouched = false;
+
+void getModelsDict().then((models) => {
+  const name = models[props.state.modelId]?.name;
+  if (name && !filenameTouched) {
+    modelLabel.value = name;
+    filename.value = `${name}-${stamp}`;
+  }
+});
 
 function uuid() {
   return URL.createObjectURL(new Blob()).slice(-36);
@@ -41,13 +51,12 @@ const generate_new_image = async () => {
 function download_workspace(): void {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([JSON.stringify(props.state, null, 2)], { type: "application/json" }));
-  a.download = `${filename.value ?? props.state.modelId}.json`;
+  a.download = `${filename.value || `${modelLabel.value}-${now()}`}.json`;
   a.dispatchEvent(new MouseEvent("click"));
 }
 
-const set_filename = (event: Event) => {
-  const t = event.currentTarget as HTMLInputElement;
-  filename.value = t.value;
+const set_filename = () => {
+  filenameTouched = true;
 };
 
 const array = ref<Record<string, string | number>>({ あああああ: "ああああ", null: 111, iiii: 1111, pppp: "23344" });
@@ -86,7 +95,7 @@ function mp(image: { [key: string]: SimpleImage }) {
     <h2>Workspace</h2>
     <button @click="generate_new_image">GEN</button>
     <button @click="download_workspace">DOWNLOAD</button>
-    <input type="text" @change="set_filename" />
+    <input v-model="filename" type="text" @input="set_filename" />
 
     <TabStack :custom-titles="customTabTitles">
       <template #generate>

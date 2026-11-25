@@ -13,4 +13,4 @@ function now(): string {
   return `${year}${month}${date}-${hour}${minute}`;
 }
 
-export { nameof, dataurl };
+export { nameof, dataurl, now };

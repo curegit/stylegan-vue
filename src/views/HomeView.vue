@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import type { Model } from "../client";
 import { getModels } from "../call";
 import { dataurl } from "../utils";
 import ItemCard from "../components/ThumbnailCard.vue";

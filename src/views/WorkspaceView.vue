@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import { getModelsDict } from "../call";
 import { dataurl } from "../utils";
 import ImageGrid from "../components/ImageGrid.vue";
 
@@ -20,10 +19,6 @@ const props = defineProps<{
 
 const filename = ref<string | undefined>(undefined);
 
-async function modelSpec() {
-  return (await getModelsDict())[props.state.modelId];
-}
-
 function uuid() {
   return URL.createObjectURL(new Blob()).slice(-36);
 }
@@ -32,7 +27,7 @@ const generate_new_image = async () => {
   const task = runModelGenerate(props.state.modelId);
 
   gen_pending.value.push(task);
-  const { data, error } = await task;
+  const { data } = await task;
 
   if (data) {
     const s = props.state;
@@ -43,7 +38,7 @@ const generate_new_image = async () => {
   }
 };
 
-function download_workspace(event: MouseEvent): void {
+function download_workspace(): void {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([JSON.stringify(props.state, null, 2)], { type: "application/json" }));
   a.download = `${filename.value ?? props.state.modelId}.json`;
@@ -55,9 +50,7 @@ const set_filename = (event: Event) => {
   filename.value = t.value;
 };
 
-const l = ref<any>(undefined);
-
-const array = ref<any>({ あああああ: "ああああ", null: 111, iiii: 1111, pppp: "23344" });
+const array = ref<Record<string, string | number>>({ あああああ: "ああああ", null: 111, iiii: 1111, pppp: "23344" });
 
 function dict<T>(pairs: Array<[string | number, T]>) {
   return pairs.map(([k, v]) => ({ [k]: v })).reduce((l, r) => Object.assign(l, r), {});
@@ -71,11 +64,9 @@ const customTabTitles = ref<Record<string, string>>({});
 
 const selected = ref<{ [key: string]: boolean }>({});
 
-function send() {}
-
-function deletea(d: { [key: string]: any }, se: { [key: string]: boolean }) {
+function deletea(d: { [key: string]: SimpleImage }, se: { [key: string]: boolean }) {
   console.log(d, se);
-  function delete_gen(event: MouseEvent) {
+  function delete_gen() {
     for (const [key, value] of Object.entries(se)) {
       if (value) {
         delete d[key];
@@ -102,8 +93,8 @@ function mp(image: { [key: string]: SimpleImage }) {
         <HorizontalSplitter>
           <template #left>
             <div>
-              <ImageGrid :images="mp(state.data.generated.default.images)" v-model="selected">
-                <template v-for="_ in gen_pending" :key="_">
+              <ImageGrid v-model="selected" :images="mp(state.data.generated.default.images)">
+                <template v-for="(_, index) in gen_pending" :key="index">
                   <ComputingIndicator :scale="1.5"></ComputingIndicator>
                 </template>
               </ImageGrid>
@@ -114,7 +105,7 @@ function mp(image: { [key: string]: SimpleImage }) {
           </template>
         </HorizontalSplitter>
       </template>
-      <template v-for="(label, index) in array" :key="index" #[index] :props="1">{{ label }}</template>
+      <template v-for="(label, index) in array" :key="index" #[index]>{{ label }}</template>
     </TabStack>
   </main>
 </template>

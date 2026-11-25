@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SelectionItem from "../components/SelectionItem.vue";
 
-const selection = defineModel<{ [key: string]: boolean }>({ required: true, default: {} });
+const selection = defineModel<{ [key: string]: boolean }>({ required: true, default: () => ({}) });
 
 interface img {
   src: string;

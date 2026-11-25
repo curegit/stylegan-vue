@@ -29,14 +29,4 @@ export declare global {
   type SimpleImage = ImageData & {
     latent: string;
   };
-
-  interface Model {
-    id: string;
-    name: string;
-    description: string;
-    width: number;
-    height: number;
-    mimeType: string;
-    example: string;
-  }
 }

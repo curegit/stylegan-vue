@@ -9,9 +9,15 @@ interface Props {
   customTitles?: Record<string, string>;
 }
 
-const { color, activeColor, tabRadius, tabRadiusConcave, customTitles = {} } = defineProps<Props>();
+const {
+  color = "var(--tab-color-default)",
+  activeColor = "var(--tab-active-color-default)",
+  tabRadius = "var(--tab-radius-default)",
+  tabRadiusConcave = "var(--tab-radius-concave-default)",
+  customTitles = {},
+} = defineProps<Props>();
 
-const slots = defineSlots<{ [key: string]: (props: { title: string }) => any }>();
+const slots = defineSlots<{ [key: string]: (props: { title: string }) => unknown }>();
 
 const activatedTabKey = ref<null | string>(null);
 
@@ -83,10 +89,10 @@ svg {
 }
 
 .tab-bar {
-  --radius: v-bind("tabRadius ?? 'var(--tab-radius-default)'");
-  --radius-concave: v-bind("tabRadiusConcave ?? 'var(--tab-radius-concave-default)'");
-  --tab-color: v-bind("color ?? 'var(--tab-color-default)'");
-  --active-tab-color: v-bind("activeColor ?? 'var(--tab-active-color-default)'");
+  --radius: v-bind(tabRadius);
+  --radius-concave: v-bind(tabRadiusConcave);
+  --tab-color: v-bind(color);
+  --active-tab-color: v-bind(activeColor);
 }
 
 .tabs {

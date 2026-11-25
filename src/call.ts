@@ -1,9 +1,10 @@
-import createClient from "openapi-fetch";
-import type { paths } from "./schemas";
+import { blend, generate, mix, models } from "./client";
+import type { GenerateData, Model } from "./client";
+import { client } from "./client/client.gen";
 
-const apiLocation = "" + (import.meta.env.VITE_STYLEGAN_API || "http://localhost:8000");
+const apiLocation = import.meta.env.VITE_STYLEGAN_API || "";
 
-const client = createClient<paths>({ baseUrl: apiLocation });
+client.setConfig({ baseUrl: apiLocation });
 
 const getModels = (() => {
   let cached: Model[] | null = null;
@@ -11,65 +12,50 @@ const getModels = (() => {
     if (cached) {
       return cached;
     }
-    const { data, error } = await client.GET("/models/");
+    const { data, error } = await models();
     if (data) {
       cached = data;
       return cached;
     }
-    return Promise.reject({ data, error });
+    return Promise.reject(error);
   }
   return get;
 })();
 
 async function getModelsDict() {
-  const models = await getModels();
-  return models.reduce((a: Record<string, Model>, x: Model) => {
+  const list = await getModels();
+  return list.reduce((a: Record<string, Model>, x: Model) => {
     a[x.id] = x;
     return a;
   }, {});
 }
 
-let prevModelCall = Promise.resolve();
+let prevModelCall: Promise<void> = Promise.resolve();
 
-function runModelGenerate(
-  model_id: string,
-  queries: paths["/{model_id}/generate"]["post"]["parameters"]["query"] = undefined,
-  timeoutMs: number = 5000,
-  serial: boolean = true,
-) {
-  let resolver = () => {};
-  const waitRun = new Promise<void>((resolve) => {
-    resolver = () => resolve();
+function runSerial<T>(task: () => Promise<T>, timeoutMs: number, serial: boolean): Promise<T> {
+  let release = () => {};
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
   });
-  const waitPrevRun = serial ? prevModelCall : Promise.resolve();
-  prevModelCall = waitRun;
-  const task = waitPrevRun.then(() => client.POST("/{model_id}/generate", { params: { path: { model_id } }, queries: queries }).finally(() => resolver()));
-  const timeoutPromise = new Promise<never>((_, reject) => setTimeout(reject, timeoutMs));
-  return Promise.race([task, timeoutPromise]).finally(() => resolver());
+  const waitPrev = serial ? prevModelCall : Promise.resolve();
+  prevModelCall = gate;
+  const run = waitPrev.then(task).finally(release);
+  const timeout = new Promise<never>((_, reject) => {
+    setTimeout(reject, timeoutMs);
+  });
+  return Promise.race([run, timeout]).finally(release);
+}
+
+function runModelGenerate(model_id: string, query: GenerateData["query"] = undefined, timeoutMs: number = 5000, serial: boolean = true) {
+  return runSerial(() => generate({ path: { model_id }, query }), timeoutMs, serial);
 }
 
 function runModelBlend(model_id: string, styles: string[], timeoutMs: number = 5000, serial: boolean = true) {
-  let resolver = () => {};
-  const waitRun = new Promise<void>((resolve) => {
-    resolver = () => resolve();
-  });
-  const waitPrevRun = serial ? prevModelCall : Promise.resolve();
-  prevModelCall = waitRun;
-  const task = waitPrevRun.then(() => client.POST("/{model_id}/blend", { params: { path: { model_id } }, body: { styles } }).finally(() => resolver()));
-  const timeoutPromise = new Promise<never>((_, reject) => setTimeout(reject, timeoutMs));
-  return Promise.race([task, timeoutPromise]).finally(() => resolver());
+  return runSerial(() => blend({ path: { model_id }, body: { styles } }), timeoutMs, serial);
 }
 
 function runModelMix(model_id: string, styles: string[], timeoutMs: number = 5000, serial: boolean = true) {
-  let resolver = () => {};
-  const waitRun = new Promise<void>((resolve) => {
-    resolver = () => resolve();
-  });
-  const waitPrevRun = serial ? prevModelCall : Promise.resolve();
-  prevModelCall = waitRun;
-  const task = waitPrevRun.then(() => client.POST("/{model_id}/mix", { params: { path: { model_id } }, body: { styles } }).finally(() => resolver()));
-  const timeoutPromise = new Promise<never>((_, reject) => setTimeout(reject, timeoutMs));
-  return Promise.race([task, timeoutPromise]).finally(() => resolver());
+  return runSerial(() => mix({ path: { model_id }, body: { styles } }), timeoutMs, serial);
 }
 
 export { apiLocation, client, getModels, getModelsDict, runModelGenerate, runModelBlend, runModelMix };

@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "serve": "vite preview --port 8080",
     "check": "vue-tsc --noEmit && eslint . && prettier -cu .",
     "lint": "eslint .",
     "fix": "eslint --fix .",

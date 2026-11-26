@@ -2,7 +2,7 @@ import { blend, generate, mix, models } from "./client";
 import type { GenerateData, Model } from "./client";
 import { client } from "./client/client.gen";
 
-const apiLocation = import.meta.env.VITE_STYLEGAN_API || "";
+const apiLocation = import.meta.env.VITE_STYLEGAN_API || "https://stylegan.mermaid.blue/api";
 
 client.setConfig({ baseUrl: apiLocation });
 
